@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentAssertions;
 using GildedRose.Items;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -8,12 +9,22 @@ namespace GildedRose.Tests
     public class GildedRoseTest
     {
         [TestMethod]
-        public void foo()
+        public void TestUpdateQuality()
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.AreEqual("fixme", Items[0].Name);
+            var items = ItemRepository.GetItems();
+            GildedRose gildedRose = new GildedRose(items);
+
+            var itemsGoldenMaster = ItemRepository.GetItems();
+            GildedRoseGoldenMaster gildedRoseGoldenMaster = new GildedRoseGoldenMaster(itemsGoldenMaster);
+
+
+            for (var i = 0; i < 31; i++)
+            {
+                gildedRose.UpdateQuality();
+                gildedRoseGoldenMaster.UpdateQuality();
+            }
+
+            items.Should().BeEquivalentTo(itemsGoldenMaster); 
         }
     }
 }
