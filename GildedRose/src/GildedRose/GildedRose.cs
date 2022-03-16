@@ -19,64 +19,47 @@ namespace GildedRose
         {
             foreach (var item in Items)
             {
-                if (item.Name != AgedBrie && item.Name != BackstagePassesToATafkal80EtcConcert)
+                if (item.Name == AgedBrie)
                 {
-                    if (item.Quality > 0)
+                    if (item.Quality < 50)
                     {
-                        if (item.Name != SulfurasHandOfRagnaros)
-                        {
-                            DecreaseQuality(item);
-                        }
+                        UpdateQuality(item);
                     }
+                    DecreaseSellIn(item);
+                    UpdateQualityIfPossible(item);
                 }
-                else
+                else if (item.Name == BackstagePassesToATafkal80EtcConcert)
                 {
                     if (item.Quality < 50)
                     {
                         UpdateQuality(item);
 
-                        if (item.Name == BackstagePassesToATafkal80EtcConcert)
+                        if (item.SellIn < 11)
                         {
-                            if (item.SellIn < 11)
-                            {
-                                UpdateQualityIfPossible(item);
-                            }
+                            UpdateQualityIfPossible(item);
+                        }
 
-                            if (item.SellIn < 6)
-                            {
-                                UpdateQualityIfPossible(item);
-                            }
+                        if (item.SellIn < 6)
+                        {
+                            UpdateQualityIfPossible(item);
                         }
                     }
-                }
-
-                if (item.Name != SulfurasHandOfRagnaros)
-                {
                     DecreaseSellIn(item);
+                    item.Quality = 0;
                 }
-
-                if (item.SellIn < 0)
+                else if (item.Name == SulfurasHandOfRagnaros)
                 {
-                    if (item.Name != AgedBrie)
+                }
+                else
+                {
+                    if (item.Quality > 0)
                     {
-                        if (item.Name != BackstagePassesToATafkal80EtcConcert)
-                        {
-                            if (item.Quality > 0)
-                            {
-                                if (item.Name != SulfurasHandOfRagnaros)
-                                {
-                                    DecreaseQuality(item);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            item.Quality = 0;
-                        }
+                        DecreaseQuality(item);
                     }
-                    else
+                    DecreaseSellIn(item);
+                    if (item.Quality > 0)
                     {
-                        UpdateQualityIfPossible(item);
+                        DecreaseQuality(item);
                     }
                 }
             }
